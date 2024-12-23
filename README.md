@@ -1,16 +1,29 @@
-This is a skeleton project for an Android application to customize an external keyboard layout without rooting or 3rd-party keyboard installation.
+This is an Android application to provide an additional keyboard layout for the German
+version (QWERTZ) of the foldable Lab31 Bluetooth keyboard.
 
-It's a skeleton, so there is no apk or Play Store link. You'll have to build it and install resulting app on a device manually.
+This keyboard is being sold at local Action stores 
+in Germany for only € 6.95. The quality is actually pretty decent for its extremely low price.
 
-**Note**: if you don't want to build the app take a look at [ExKeyMo](https://exkeymo.herokuapp.com/) ([source code](https://github.com/ris58h/exkeymo-web)). It will build the app for you, but it's limited to two layouts only.
+Unfortunately, the keyboard layout of the German version is unfortunate, if you
+want to use the keyboard as a developer. The pipe symbol is not mapped to any
+key, there is no way to enter it from the keyboard. ESC key and  < > characters can only be accessed in
+combination with the FN key. All other special characters can be accessed as
+usual with a QWERTZ layout, although they are not printed on the keycaps.
 
-# External keyboard customization
-There are several ways to customize an external keyboard on Android:
-1. Install 3-rd party keyboard which allows customization.
-2. Add/modify [Key Layout Files](https://source.android.com/devices/input/key-layout-files) or [Key Character Map Files](https://source.android.com/devices/input/key-character-map-files) on a device with root access.
-3. Install an application which provides [additional keyboard layouts](https://developer.android.com/reference/android/hardware/input/InputManager#ACTION_QUERY_KEYBOARD_LAYOUTS) (Key Character Map files).
+By installing this application, the layout is modified as follows:
 
-This project aims at the 3-rd option.
+* The left command key is mapped to the combined <>| key as found on german
+  keyboards. Pressing this key without any modifier yields <, using Shift+
+  left command yields >, AltGr+left command yields |.
+* The CapsLock key is mapped to ESC.
+
+You simply install the app on your Android device, connect your Lab31 keyboard via Bluetooth and
+select "Lab31 German (DE), Dev" from the list of keybaord layouts for the physical keyboard in device settings.
+This app does not provide any UI and does not require root access to your
+device.
+
+
+This application is based on [this](https://github.com/ris58h/custom-keyboard-layout) skeleton project. 
 
 # The Way
 1. Clone the project
@@ -18,5 +31,13 @@ This project aims at the 3-rd option.
 3. Build the app and install it on a device.
 4. Select your custom layout in device settings.
 
-# Example
-You can find an example [here](https://github.com/ris58h/custom-keyboard-layout/tree/Vendor_17ef_Product_6048/app/src/main/res/raw). There are two ```kcm``` files to make MacOS like layout for ThinkPad Compact Bluetooth Keyboard (English and Russian). Default ```kcm``` files for different languages can be found [here](https://android.googlesource.com/platform/frameworks/base/+/master/packages/InputDevices/res/raw).
+
+```
+./gradlew build
+```
+
+
+The ready-to-install apk-file can be found at
+```
+/spielwiese/lab31-keyboard-extended/app/build/outputs/apk/release
+```

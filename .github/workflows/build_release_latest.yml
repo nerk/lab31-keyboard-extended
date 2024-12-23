@@ -21,12 +21,9 @@ jobs:
         run: chmod +x gradlew
       - name : Retrieve Version
         run: |
-          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName)"
+          echo "version_name=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_ENV
         id: android_version
-      - name: Get version
-        run: |
-          echo "version_name=${{steps.android_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV
-      - run: echo "Building APK."  
+      - run: echo "Building APK."
       - name: Build with Gradle
         run: ./gradlew build
       - run: echo "Build status report=${{ job.status }}."
@@ -34,7 +31,7 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          filename: lab31kbd-${{steps.android_version.outputs.VERSION_NAME}}-apk.zip
+          filename: lab31kbd-${{env.version_name}}-apk.zip
           directory: app/build/outputs/apk/release
       - name: Android APK Release
         uses: softprops/action-gh-release@v1
@@ -43,6 +40,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: Release ${{env.version_name}}
-          tag_name: ${{steps.android_version.outputs.VERSION_NAME}}
+          tag_name: ${{env.version_name}}
           prerelease: false
           files: app/build/outputs/apk/release/lab31kbd-${{env.version_name}}-apk.zip

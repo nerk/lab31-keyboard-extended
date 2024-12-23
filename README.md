@@ -21,7 +21,8 @@ By installing this application, the layout is modified as follows:
   left command yields >, AltGr+left command yields |.
 * The CapsLock key is mapped to ESC.
 
-You simply install the app on your Android device, connect your Lab31 keyboard via Bluetooth and
+Download the latest zip file from [Releases](https://github.com/nerk/lab31-keyboard-extended/releases), 
+unzip the contents. Install the apk file on your Android device, connect your Lab31 keyboard via Bluetooth and
 select "Lab31 German (DE), Dev" from the list of keyboard layouts for the physical keyboard in device settings.
 This app does not provide any UI and does not require root access to your
 device.

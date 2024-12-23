@@ -55,7 +55,7 @@ jobs:
         with:
           type: 'zip'
           filename: lab31kbd-${{steps.read_action_js.outputs['version']}}-apk.zip
-          directory: build/app/outputs/apk/release
+          directory: app/build/outputs/apk/release
       - name: Android APK Release
         uses: softprops/action-gh-release@v1
         #if: startsWith(github.ref, 'refs/tags/')
@@ -65,4 +65,4 @@ jobs:
           name: Release ${{steps.read_action_js.outputs['version']}}
           tag_name: ${{steps.read_action_js.outputs['version']}}
           prerelease: ${{steps.read_action_js.outputs['lab31kbd_prerelease']}}
-          files: build/app/outputs/apk/release/lab31kbd-${{steps.read_action_js.outputs['version']}}-apk.zip
+          files: app/build/outputs/apk/release/lab31kbd-${{steps.read_action_js.outputs['version']}}-apk.zip

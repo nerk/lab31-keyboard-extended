@@ -8,36 +8,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  version:
-    name: Create version number
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.7
-        with:
-          versionSpec: "5.x"
-      - name: Use GitVersion
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.7
-      - name: Create version.txt with nuGetVersion
-        run: echo ${{ steps.gitversion.outputs.nuGetVersion  }} > version.txt
-      - name: Upload version.txt
-        uses: actions/upload-artifact@v4
-        with:
-          name: gitversion
-          path: version.txt
-
   build-and-release-android:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Install ninja build tools etc.
+      - name : Retrieve Version
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y ninja-build libgtk-3-dev libblkid-dev
+          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName)"
+        id: android_version
+      - name: Get version
+        run: |
+          echo "version_name=${{steps.android_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
@@ -46,7 +26,7 @@ jobs:
           cache: 'gradle'
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - run: echo "Building Debug APK."  
+      - run: echo "Building APK."  
       - name: Build with Gradle
         run: ./gradlew build
       - run: echo "Build status report=${{ job.status }}."
@@ -54,7 +34,7 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          filename: lab31kbd-${{steps.read_action_js.outputs['version']}}-apk.zip
+          filename: lab31kbd-${{env.version_name}}-apk.zip
           directory: app/build/outputs/apk/release
       - name: Android APK Release
         uses: softprops/action-gh-release@v1
@@ -62,7 +42,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Release ${{steps.read_action_js.outputs['version']}}
-          tag_name: ${{steps.read_action_js.outputs['version']}}
-          prerelease: ${{steps.read_action_js.outputs['lab31kbd_prerelease']}}
-          files: app/build/outputs/apk/release/lab31kbd-${{steps.read_action_js.outputs['version']}}-apk.zip
+          name: Release ${{env.version_name}}
+          tag_name: ${{env.version_name}}
+          prerelease: false
+          files: app/build/outputs/apk/release/lab31kbd-${{env.version_name}}-apk.zip
